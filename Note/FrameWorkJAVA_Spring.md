@@ -81,4 +81,81 @@
 
      
 
-#### 注意
+### 3.Bean管理
+
+#### 方法
+
+1.bean实例化的三种方式
+
+- 使用无参构造方法创建，包括Bean1.<!--有参数的构造方法，会导致运行出错-->
+
+  ```java
+  package bean;
+  // 使用无参构造方法的类
+  public class Bean1 {
+  //    以下为有参数的构造方法，会导致运行出错，因此需要删除
+      //    public String name;
+  //
+  //    public Bean1(String name) {
+  //        this.name = name;
+  //    }
+  }
+  ```
+
+- 使用静态工厂创建，包括Bean2.java,Bean2Factory.java
+
+  ```java
+  package bean;
+  public class Bean2Factory {
+      public static Bean2 getBean2(){
+          return new Bean2();
+      }
+  }
+  ```
+
+- 使用实例工厂创建，包括Bean3.java,Bean3Factory.java
+
+  ```java
+  package bean;
+  public class Bean3Factory {
+      public Bean3 getBean3(){
+          return new Bean3();
+      }
+  }
+  ```
+
+- 配置文件：applicationContext.xml
+
+  ```xml
+  <!--  1.Bean实例化的三种方式  -->
+      <!--  1.1 使用类的无参构造创建  -->
+      <bean id="bean1" class="bean.Bean1" />
+  
+      <!--  1.2 使用静态工厂创建(bean.Bean2,bean.Bean2Factory)  -->
+      <bean id="bean2" class="bean.Bean2Factory" factory-method="getBean2" />
+  
+      <!--  1.3 使用实例工厂创建(bean.Bean3,bean.Bean3Factory)-->
+          <!--  1.3.1 创建工厂对象-->
+          <bean id="bean3Factory" class="bean.Bean3Factory" />
+          <!--  1.3.2 使用工厂对象创建-->
+          <bean id="bean3" factory-bean="bean3Factory" factory-method="getBean3" />
+  ```
+
+#### 索引
+
+1.实例化的三种方式
+
+- /Users/toyz/Package/FrameWorkJAVA/Spring/Spring_Bean/Spring_BeanInstantiation/Spring_Hello
+
+
+
+
+
+
+
+
+
+
+
+
+
