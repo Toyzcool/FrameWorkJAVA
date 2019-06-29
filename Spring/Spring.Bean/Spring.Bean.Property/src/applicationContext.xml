@@ -5,14 +5,63 @@
 
        xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans.xsd">
     <!--1. 常用的属性-->
-    <!--1.1 scope属性singleton为默认属性，单例 -->
-    <bean id="beanSingleton" class="bean.Bean1" scope="singleton" />
-    <!--1.2 scope属性prototype为多例 -->
-    <bean id="beanPrototype" class="bean.Bean1" scope="prototype" />
+        <!--1.1 scope属性singleton为默认属性，单例 -->
+        <bean id="beanSingleton" class="bean.Bean1" scope="singleton" />
+        <!--1.2 scope属性prototype为多例 -->
+        <bean id="beanPrototype" class="bean.Bean1" scope="prototype" />
 
     <!--2. 属性注入的方法-->
-    <!--2.1 有参的构造方法注入-->
-    <bean id="beanSet" class="bean.Bean2">
-        <constructor-arg name="name" value="Toyz" />
-    </bean>
+        <!--2.1 有参的构造方法注入-->
+        <bean id="beanSet" class="bean.Bean2">
+            <constructor-arg name="beanName" value="Toyz" />
+        </bean>
+        <!--2.2 set方法注入-->
+        <bean id="beanSet2" class="bean.Bean3">
+            <property name="beanName" value="Tom" />
+        </bean>
+
+    <!--3. 注入对象类型属性-->
+        <!--3.1 实例化两个对象-->
+        <bean id="userDao" class="bean.UserDao" />
+        <bean id="userService" class="bean.UserService">
+            <!--3.2 将对象作为属性注入-->
+            <property name="userDao" ref="userDao" />
+        </bean>
+
+    <!--4. 复杂类型的属性注入-->
+        <!--4.1 实例化对象-->
+        <bean id="multipleBean" class="bean.MultipleBean">
+            <!--4.1.1 数组类型属性注入-->
+            <property name="strings" >
+                <list>
+                    <value>strings1</value>
+                    <value>strings2</value>
+                    <value>strings3</value>
+                </list>
+            </property>
+            <!--4.1.2 List类型属性注入-->
+            <property name="list">
+                <list>
+                    <value>list1</value>
+                    <value>list2</value>
+                    <value>list3</value>
+                </list>
+            </property>
+            <!--4.1.3 Map类型属性注入-->
+            <property name="map">
+                <map>
+                    <entry key="m1" value="map1"></entry>
+                    <entry key="m2" value="map2"></entry>
+                    <entry key="m3" value="map3"></entry>
+                </map>
+            </property>
+            <!--4.1.4 Properties类型属性注入-->
+            <property name="properties">
+                <props>
+                    <prop key="p1">pro1</prop>
+                    <prop key="p2">pro2</prop>
+                    <prop key="p3">pro3</prop>
+                </props>
+            </property>
+        </bean>
 </beans>

@@ -170,8 +170,6 @@
      }
      ```
 
-     
-
   2. 有参构造方法注入
 
      ```java
@@ -184,8 +182,6 @@
      
      	User user = new User("abc");
      ```
-
-     
 
   3. 使用接口注入
 
@@ -208,7 +204,224 @@
      }
      ```
 
-- Spring框架中支持set方法、有参构造方法注入
+- Spring框架中支持set方法、有参构造方法注入属性、p空间注入
+
+  1. set方法注入（主要方法）
+
+     <!--类文件.java-->
+
+     ```java
+     package bean;
+     // set方法注入属性值
+     public class Bean3 {
+         private String beanName;
+     
+         public void setBeanName(String beanName) {
+             this.beanName = beanName;
+         }
+         public void setSucceed() {
+             System.out.println("set方法注入成功，beanName："+beanName);
+         }
+     }
+     ```
+      <!--配置文件.xml-->
+     ```xml
+     		<!--2.2 set方法注入-->
+         <bean id="beanSet2" class="bean.Bean3">
+             <property name="beanName" value="Tom" />
+         </bean>
+     ```
+
+  2. 有参构造方法注入
+
+     <!--类文件.java-->
+     
+     ```java
+     package bean;
+     // 有参的构造方法实现注入
+     public class Bean2 {
+         private String beanName;
+     
+         public Bean2(String beanName) {
+             this.beanName = beanName;
+         }
+         public void setSucceed(){
+             System.out.println("通过有参构造方法注入成功,beanName:"+beanName);
+         }
+}
+     ```
+     
+      <!--配置文件.xml-->
+     
+     ```xml
+         <!--2.1 有参的构造方法注入-->
+        <bean id="beanSet" class="bean.Bean2">
+             <constructor-arg name="beanName" value="Toyz" />
+       </bean>
+     ```
+     
+  3. p空间注入——少见
+  
+     <!--类文件.java-->
+  
+     ```java
+     public class pBean(){
+       private String pName;
+       public void setPName(String pName){
+         this.pName = pName;
+       }
+     }
+     ```
+  
+     <!--配置文件.xml-->
+  
+     ```xml
+     <beans xmlns="http://www.springframework.org/schema/beans"
+     
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:p="http://www.springframework.org/schema/p"
+            xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans.xsd">
+     
+         <bean id="pBean" class="bean.pBean" p:pName="Toyz" />
+     </beans>
+     ```
+
+#### 4.对象类型属性注入
+
+- 步骤
+
+  1. 创建两个类，副类无参，主类将副类作为属性并添加set方法
+
+     <!--主类.java-->
+
+     ```java
+     package bean;
+     // 注入对象类型属性
+     public class UserService {
+     //    UserDao作为属性
+         public UserDao userDao;
+     //    属性的set方法
+         public void setUserDao(UserDao userDao) {
+             this.userDao = userDao;
+         }
+         public void add(){
+             System.out.println("UserService...");
+             userDao.add();
+         }
+     }
+     ```
+
+     <!--副类.java-->
+
+     ```java
+     package bean;
+     // 作为属性被注入到UserService类,不需要有属性，因此使用无参构造法创建实例
+     public class UserDao {
+         public void add(){
+             System.out.println("UserDao...");
+         }
+     }
+     ```
+
+  2. 配置文件中，先实例化两个类的对象，然后将对象作为属性注入
+
+     <!--配置文件.xml-->
+
+     ```xml
+      <!--3.注入对象类型属性-->
+             <!--3.1 实例化两个对象-->
+             <bean id="userDao" class="bean.UserDao" />
+             <bean id="userService" class="bean.UserService">
+                 <!--3.2 将对象作为属性注入-->
+                 <property name="userDao" ref="userDao" />
+             </bean>
+     ```
+
+- 注意
+  1. **配置文件中，property标签中的name属性和ref属性，分别代表UserService类中的属性名称、dao配置bean标签中的id值（指实例化对象）**
+
+#### 5.复杂类型属性注入
+
+- 步骤
+
+  1. 新建类，包含复杂的类型作为属性，（字符串数组、list、map、propertise），并新建测试方法
+
+     <!--类.java-->
+
+     ```java
+     package bean;
+     import java.util.List;
+     import java.util.Map;
+     import java.util.Properties;
+     //复杂类型的属性注入
+     public class MultipleBean {
+         private String[] strings;
+         private List<String> list;
+         private Map<String,String> map;
+         private Properties properties;
+         public void setStrings(String[] strings) {
+             this.strings = strings;
+         }
+         public void setList(List<String> list) {
+             this.list = list;
+         }
+         public void setMap(Map<String, String> map) {
+             this.map = map;
+         }
+         public void setProperties(Properties properties) {
+             this.properties = properties;
+         }
+         public void test(){
+             System.out.println("strings:"+strings);
+             System.out.println("list:"+list);
+             System.out.println("map:"+map);
+             System.out.println("properties:"+properties);
+         }
+     }
+     ```
+
+  2. 配置复杂类型属性的值
+
+     <!--配置文件.xml-->
+
+     ```xml
+     <!--4. 复杂类型的属性注入-->
+             <!--4.1 实例化对象-->
+             <bean id="multipleBean" class="bean.MultipleBean">
+                 <!--4.1.1 数组类型属性注入-->
+                 <property name="strings" >
+                     <list>
+                         <value>strings1</value>
+                         <value>strings2</value>
+                         <value>strings3</value>
+                     </list>
+                 </property>
+                 <!--4.1.2 List类型属性注入-->
+                 <property name="list">
+                     <list>
+                         <value>list1</value>
+                         <value>list2</value>
+                         <value>list3</value>
+                     </list>
+                 </property>
+                 <!--4.1.3 Map类型属性注入-->
+                 <property name="map">
+                     <map>
+                         <entry key="m1" value="map1"></entry>
+                         <entry key="m2" value="map2"></entry>
+                         <entry key="m3" value="map3"></entry>
+                     </map>
+                 </property>
+                 <!--4.1.4 Properties类型属性注入-->
+                 <property name="properties">
+                     <props>
+                         <prop key="p1">pro1</prop>
+                         <prop key="p2">pro2</prop>
+                         <prop key="p3">pro3</prop>
+                     </props>
+                 </property>
+             </bean>
+     ```
 
 ### 实现
 
@@ -255,19 +468,15 @@
   </beans>
   ```
 
-
-
-
-
-
-
 ### 索引
 
 1.实例化的三种方式
 
-- /Users/toyz/Package/FrameWorkJAVA/Spring/Spring_Bean/Spring_BeanInstantiation/Spring_Hello
+- /Users/toyz/Package/FrameWorkJAVA/Spring/Spring.Bean/Spring.Bean.Instantiation
 
+3.属性注入，4.对象类型属性注入，5.复杂类型属性注入
 
+- /Users/toyz/Package/FrameWorkJAVA/Spring/Spring.Bean/Spring.Bean.Property
 
 
 
