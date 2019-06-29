@@ -1,0 +1,25 @@
+<!--引入约束-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+<!--Bean实例化三种方式-->
+    <!--1.使用无参构造创建-->
+    <bean id="bean1" class="bean.Bean1" />
+
+    <!--2.使用静态工厂创建-->
+    <bean id="bean2" class="bean.Bean2Factory" factory-method="getBean2" />
+
+    <!--3.使用实例工厂创建-->
+    <bean id="bean3Factory" class="bean.Bean3Factory" />
+    <bean id="bean3" factory-bean="bean3Factory" factory-method="getBean3" />
+
+
+
+
+
+
+</beans>
