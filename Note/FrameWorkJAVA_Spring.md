@@ -1,12 +1,10 @@
-## FrameWorkJAVA
+# FrameWorkJAVA.Spring
 
-### A.Spring
+## 1.简介
 
-### 1.简介
+### 方法
 
-#### 方法
-
-1.基本概念
+#### 1.基本概念
 
 - 核心其一是AOP，面向切面编程，修改功能不是修改源代码实现
 - 核心其二是IOC，是反转控制，将获取到的对象的生命周期交给Spring管理，比如之前new的对象，现在变为直接从Spring获取
@@ -14,11 +12,11 @@
 
 - POJO，即 Plain Old Java Objects，简单老式 Java 对象。它可以包含业务逻辑或持久化逻辑，但不担当任何特殊角色且不继承或不实现任何其它Java框架的类或接口。
 
-### 2.IOC
+## 2.IOC
 
-#### 方法
+### 方法
 
-1.底层原理
+#### 1.底层原理
 
 ![](/Users/toyz/Package/FrameWorkJAVA/Note/ioc底层原理.png)
 
@@ -35,7 +33,7 @@
   UserService service = clazz.newInstance();
   ```
 
-2.基本实现步骤
+#### 2.实现步骤
 
 - 导入jar包，包括核心四个包：context、core、bean、expression，以及输出日志的log包
 
@@ -81,11 +79,11 @@
 
      
 
-### 3.Bean管理
+## 3.Bean管理
 
-#### 方法
+### 方法
 
-1.bean实例化的三种方式
+#### 1.实例化方式
 
 - 使用无参构造方法创建，包括Bean1.<!--有参数的构造方法，会导致运行出错-->
 
@@ -141,7 +139,67 @@
           <bean id="bean3" factory-bean="bean3Factory" factory-method="getBean3" />
   ```
 
-#### 索引
+#### 2.常用属性
+
+- 实现1
+- id：根据id得到配置对象，不能包含特殊字符
+- name：功能与id基本一致，可以包含特殊字符，但已经不用
+- class：创建对象所在的全路径
+- scope：共有五种属性值，singleton、prototype、request、session、globalsession
+  1. singleton：默认值，单例，获取到的对象地址相同
+  2. prototype：多例，获取到的对象不同
+  3. request：创建对象并放到request域里面
+  4. session：创建对象并放到session域里面
+  5. globalsession：创建对象并放到globalsession域里面 <!--单点登录，使用的原理是globalsession-->
+
+### 实现
+
+- 实现1
+
+  ```java
+  package test;
+  
+  import bean.Bean1;
+  import org.springframework.context.ApplicationContext;
+  import org.springframework.context.support.ClassPathXmlApplicationContext;
+  
+  public class TestCommonProperty {
+      public static void main(String[] args) {
+          ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+  
+  //        1.常用属性
+  //        1.1 scope属性为singleton
+          Bean1 bean1 = (Bean1) context.getBean("bean1");
+          Bean1 bean2 = (Bean1) context.getBean("bean1");
+          System.out.println("1.1 scope属性为singleton");
+          System.out.println("bean1地址为："+bean1);
+          System.out.println("bean2地址为："+bean2);
+  //        1.2 scope属性为prototype
+          Bean1 bean3 = (Bean1) context.getBean("bean2");
+          Bean1 bean4 = (Bean1) context.getBean("bean2");
+          System.out.println("1.2 scope属性为prototype");
+          System.out.println("bean3地址为："+bean3);
+          System.out.println("bean4地址为："+bean4);
+      }
+  }
+  ```
+
+  ```xml
+  <!--引入约束-->
+  <beans xmlns="http://www.springframework.org/schema/beans"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans.xsd">
+      <!--    1. 常用的属性-->
+      <!--    1.1 scope属性singleton为默认属性，单例 -->
+      <bean id="bean1" class="bean.Bean1" scope="singleton" />
+      <!--    1.2 scope属性prototype为多例 -->
+      <bean id="bean2" class="bean.Bean1" scope="prototype" />
+  </beans>
+  ```
+
+  
+
+### 索引
 
 1.实例化的三种方式
 

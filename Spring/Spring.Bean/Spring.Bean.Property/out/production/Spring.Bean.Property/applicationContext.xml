@@ -1,0 +1,14 @@
+<!--引入约束-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!--    1. 常用的属性-->
+    <!--    1.1 scope属性singleton为默认属性，单例 -->
+    <bean id="bean1" class="bean.Bean1" scope="singleton" />
+    <!--    1.2 scope属性prototype为多例 -->
+    <bean id="bean2" class="bean.Bean1" scope="prototype" />
+
+
+</beans>
