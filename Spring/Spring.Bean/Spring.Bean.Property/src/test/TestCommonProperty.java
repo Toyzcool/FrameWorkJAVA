@@ -10,22 +10,16 @@ public class TestCommonProperty {
 
 //        1.常用属性
 //        1.1 scope属性为singleton
-        Bean1 bean1 = (Bean1) context.getBean("bean1");
-        Bean1 bean2 = (Bean1) context.getBean("bean1");
+        Bean1 beanSingleton1 = (Bean1) context.getBean("beanSingleton");
+        Bean1 beanSingleton2 = (Bean1) context.getBean("beanSingleton");
         System.out.println("1.1 scope属性为singleton");
-        System.out.println("bean1地址为："+bean1);
-        System.out.println("bean2地址为："+bean2);
+        System.out.println("beanSingleton1地址为："+beanSingleton1);
+        System.out.println("beanSingleton2地址为："+beanSingleton2);
 //        1.2 scope属性为prototype
-        Bean1 bean3 = (Bean1) context.getBean("bean2");
-        Bean1 bean4 = (Bean1) context.getBean("bean2");
+        Bean1 beanPrototype1 = (Bean1) context.getBean("beanPrototype");
+        Bean1 beanPrototype2 = (Bean1) context.getBean("beanPrototype");
         System.out.println("1.2 scope属性为prototype");
-        System.out.println("bean3地址为："+bean3);
-        System.out.println("bean4地址为："+bean4);
-
-
-
-
-
-
+        System.out.println("beanPrototype1地址为："+beanPrototype1);
+        System.out.println("beanPrototype2地址为："+beanPrototype2);
     }
 }

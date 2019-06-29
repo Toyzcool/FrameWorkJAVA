@@ -4,11 +4,15 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 
        xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans.xsd">
-    <!--    1. 常用的属性-->
-    <!--    1.1 scope属性singleton为默认属性，单例 -->
-    <bean id="bean1" class="bean.Bean1" scope="singleton" />
-    <!--    1.2 scope属性prototype为多例 -->
-    <bean id="bean2" class="bean.Bean1" scope="prototype" />
+    <!--1. 常用的属性-->
+    <!--1.1 scope属性singleton为默认属性，单例 -->
+    <bean id="beanSingleton" class="bean.Bean1" scope="singleton" />
+    <!--1.2 scope属性prototype为多例 -->
+    <bean id="beanPrototype" class="bean.Bean1" scope="prototype" />
 
-
+    <!--2. 属性注入的方法-->
+    <!--2.1 有参的构造方法注入-->
+    <bean id="beanSet" class="bean.Bean2">
+        <constructor-arg name="name" value="Toyz" />
+    </bean>
 </beans>

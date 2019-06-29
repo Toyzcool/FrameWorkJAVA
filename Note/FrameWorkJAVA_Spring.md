@@ -152,6 +152,64 @@
   4. session：创建对象并放到session域里面
   5. globalsession：创建对象并放到globalsession域里面 <!--单点登录，使用的原理是globalsession-->
 
+#### 3.属性注入
+
+- Java常用属性注入方式
+
+  1. set方法注入
+
+     ```java
+     Public class User(){
+     	public String name;
+       public void set(String name){
+         this.name = name;
+       }
+       
+       User user = new User();
+       user.set("abc");
+     }
+     ```
+
+     
+
+  2. 有参构造方法注入
+
+     ```java
+     public class User(){
+     	public String name;
+       public User(String name){
+        this.name = name; 
+       }
+     }
+     
+     	User user = new User("abc");
+     ```
+
+     
+
+  3. 使用接口注入
+
+     - 接口
+
+     ```java
+     public interface Dao(){
+     	public void delete(String name);
+     }
+     ```
+
+     - 注入
+
+     ```java
+     public class UserDao implements Dao{
+     	private String name;
+       public void delete(String name){
+         this.name = name;
+       }
+     }
+     ```
+
+- Spring框架中支持set方法、有参构造方法注入
+
 ### 实现
 
 - 实现1
@@ -197,7 +255,11 @@
   </beans>
   ```
 
-  
+
+
+
+
+
 
 ### 索引
 
