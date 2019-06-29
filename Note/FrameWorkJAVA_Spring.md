@@ -9,8 +9,30 @@
 - 核心其一是AOP，面向切面编程，修改功能不是修改源代码实现
 - 核心其二是IOC，是反转控制，将获取到的对象的生命周期交给Spring管理，比如之前new的对象，现在变为直接从Spring获取
 - Spring是一站式框架，在JavaEE中提供三层结构中，都有解决技术。web层为SpringMVC、servlet层为Spring的IOC、dao层为Spring的jdbcTemplate
-
 - POJO，即 Plain Old Java Objects，简单老式 Java 对象。它可以包含业务逻辑或持久化逻辑，但不担当任何特殊角色且不继承或不实现任何其它Java框架的类或接口。
+- IOC和DI区别
+  1. IOC是反转控制，将对象创建交给Spring处理
+  2. DI是依赖注入，向类里面设置属性值
+  3. 两者关系：DI是无法单独存在的，需要在IOC基础上完成操作
+
+- **Spring整合Web项目原理——重点**
+
+  - 实现思想
+
+    核心配置文件applicationContext.xml，在服务器启动时完成
+
+  - 实现原理
+
+    使用ServletContext对象、监听器
+
+  - 具体步骤
+    1. 服务器启动时，会为每个项目创建ServletContext对象
+    2. 监听器监测到ServletContext对象创建
+    3. 加载Spring配置文件，把配置文件配置对象创建
+    4. 创建出来的对象放入ServletContext域中（setAttribute方法）
+    5. 获取对象时，从ServletContext域中获取（getAttribute方法）
+
+  
 
 ## 2.IOC
 
