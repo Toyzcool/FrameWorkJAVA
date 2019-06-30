@@ -445,7 +445,7 @@
              </bean>
      ```
 
-#### 6.注解创建对象、注入属性
+#### 6.注解创建对象/注入属性
 
 - 准备工作
 
@@ -678,7 +678,9 @@
 
 - /Users/toyz/Package/FrameWorkJAVA/Spring/Spring.Bean/Spring.Bean.Property
 
+6.注解创建对象/注入属性
 
+- /Users/toyz/Package/FrameWorkJAVA/Spring/Spring.Bean/Spring.Bean.Annotation
 
 
 
