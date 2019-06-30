@@ -360,6 +360,7 @@
      ```
 
 - 注意
+  
   1. **配置文件中，property标签中的name属性和ref属性，分别代表UserService类中的属性名称、dao配置bean标签中的id值（指实例化对象）**
 
 #### 5.复杂类型属性注入
@@ -666,7 +667,6 @@
   }
   ```
 
-  
 
 ### 索引
 
@@ -681,6 +681,141 @@
 6.注解创建对象/注入属性
 
 - /Users/toyz/Package/FrameWorkJAVA/Spring/Spring.Bean/Spring.Bean.Annotation
+
+## 4.AOP
+
+### 方法
+
+#### 1.概念
+
+- 面向切面编程，扩展功能不需要修改源代码
+- 采取横向抽取机制，取代了传统的纵向继承体系
+
+#### 2.纵向抽取机制发展和原理
+
+- 目的：扩展功能，能够记录用户日志
+
+- 原始方法：需要直接在方法中添加日志功能
+
+  ```java
+  public class User{
+    // 添加方法
+    public void add(){
+   	// 添加逻辑
+    // 日志逻辑 
+  	}
+  }
+  ```
+
+- 纵向抽取机制
+
+  <!--父类.java-->
+
+  ```java
+  public class BaseUser{
+    // 日志方法
+    public void writeLog(){
+   	// 日志逻辑
+  	}
+  }
+  ```
+
+  <!--子类.java-->
+
+  ```java
+  public class User extends BaseUser{
+    // 添加方法
+    public void add(){
+      // 添加逻辑
+      // 调用父类日志方法
+      super.writeLog();
+    }
+  }
+  ```
+
+#### 3.横向抽取机制——重点
+
+- 底层：使用动态代理机制
+
+- 情况一：有接口的情况，使用jdk动态代理方式，创建 接口实现类代理对象
+
+  <!--接口.java-->
+
+  ```java
+  public interface Dao{
+    public void add();
+  }
+  ```
+
+  <!--接口实现类.java-->
+
+  ```java
+  public class DaoImpl implements Dao{
+    public void add(){
+      // 添加逻辑
+    }
+  }
+  ```
+
+  <!--接口实现类代理对象.java-->
+
+  ```
+  当前对象和DaoImpl平级
+  实现和DaoImpl相同功能，但是不是真正的对象
+  ```
+
+- 情况二：没有接口的情况，使用cglib动态代理
+
+  <!--User类.java-->
+
+  ```java
+  public class User{
+  	// 添加方法
+    public void add(){
+      // 添加逻辑
+    }
+  }
+  ```
+
+  <!--User类的子类.java-->
+
+  ```java
+  public class User1 extends User{
+  	// 添加方法
+    public void add(){
+      // 添加逻辑
+    }
+  }
+  ```
+
+  <!--User类的子类的代理对象.java-->
+
+  ```
+  在子类里面调用父类对象完成增强
+  ```
+
+#### 4.重点术语
+
+```java
+public class User{
+  public void add(){};
+  public void delete(){};
+  public void update(){};
+}
+```
+
+- 连接点（Joinpoint）：类里面能够增强的方法，如add()/delete()/update() 方法
+- 切入点（Pointcut）：实际操作中，被增强的方法，如仅增强了add()方法，则add()方法为切入点；
+- 增强/通知（Advice）：增强的逻辑，还包括以下细类：
+  - 前置增强：在方法之前执行
+  - 后置增强：在方法之后执行
+  - 异常增强：在方法出现异常后执行
+  - 最终增强：在之后增强执行之后执行
+  - 环绕增强：在方法之前和之后执行，如统计程序运行时间
+
+- 切面（Aspect）：切入点和增强的结合点，就是增强应用到切入点的过程
+
+
 
 
 
