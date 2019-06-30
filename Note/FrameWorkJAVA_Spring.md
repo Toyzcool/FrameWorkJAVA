@@ -445,6 +445,93 @@
              </bean>
      ```
 
+#### 6.注解创建对象、注入属性
+
+- 准备工作
+
+  1. 导入jar包，并在配置文件中添加约束
+
+  2. 添加声明，开启注解扫描，有两种方式，区别如下
+
+     ```xml
+     <?xml version="1.0" encoding="UTF-8"?>
+     <beans xmlns="http://www.springframework.org/schema/beans"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:context="http://www.springframework.org/schema/context"
+            xsi:schemaLocation="
+             http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+             http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+     
+         <!--用于扫描有注解的声明-->
+         <context:component-scan base-package="bean" />
+     
+         <!--仅仅扫描属性上的注解-->
+         <!--<context:annotation-config></context:annotation-config>-->
+     </beans>
+     ```
+
+- 创建对象
+
+  1. 创建类文件
+
+  2. 编写类中属性和方法
+
+  3. 在类中注解，Component/Service/Controller/Repository四种方式功能一样
+
+     ```java
+     package bean;
+     import org.springframework.context.annotation.Scope;
+     import org.springframework.stereotype.Service;
+     // 注解，Component/Service/Controller/Repository四种方式功能一样
+     @Service(value = "user")
+     @Scope(value = "prototype")
+     public class User {
+         public void add(){
+             System.out.println("add...");
+         }
+     }
+     ```
+
+- 注入属性
+
+  1. 创建主类和副类
+
+  2. 主类和副类分别使用注解创建对象
+
+  3. 主类添加副类为属性
+
+  4. 在副类属性上添加注解，包含两种@Resource/@Autowired
+
+  5. **@Resource和@Autowired区别是：@Resource有name属性，匹配这个值对应的类，相当于bean的id属性；@Autowired无其他属性，直接通过副类的名称匹配**
+
+     ```java
+     package bean;
+     import org.springframework.beans.factory.annotation.Autowired;
+     import org.springframework.context.annotation.ImportResource;
+     import org.springframework.stereotype.Service;
+     import javax.annotation.Resource;
+     
+     @Service("userService")
+     public class UserService {
+     
+     //    属性注解方式一，不需要set方法
+     //    @Autowired
+     //    private UserDao userDao;
+     
+     //    属性注解方式二，不需要set方法
+         @Resource(name = "userDao123")
+         private UserDao userDao;
+     
+         public void add(){
+             System.out.println("UserService...");
+             userDao.add();
+         }
+     }
+     
+     ```
+
+- 创建对象和注入属性混合方法，实现2
+
 ### 实现
 
 - 实现1
@@ -489,6 +576,97 @@
       <bean id="bean2" class="bean.Bean1" scope="prototype" />
   </beans>
   ```
+
+- 实现2
+
+  <!--三个类.java，一主类，两副类-->
+
+  ```java
+  package bean;
+  import org.springframework.beans.factory.annotation.Autowired;
+  import javax.annotation.Resource;
+  // 配置文件和注解混合使用
+  // 配置文件生成对象
+  // 注解注入属性
+  public class BookService {
+  
+      @Autowired
+      private BookDao bookDao;
+  
+      @Resource(name = "orderDao123")
+      private OrderDao orderDao;
+  
+      public void add(){
+          System.out.println("BookService...");
+          bookDao.add();
+          orderDao.add();
+      }
+  }
+  ```
+
+  ```java
+  package bean;
+  import org.springframework.stereotype.Service;
+  public class BookDao {
+      public void add(){
+          System.out.println("BookDao...");
+      }
+  }
+  ```
+
+  ```java
+  package bean;
+  import org.springframework.stereotype.Service;
+  public class OrderDao {
+      public void add(){
+          System.out.println("OrderDao...");
+      }
+  }
+  ```
+
+  <!--配置文件.xml-->
+
+  ```xml
+  <?xml version="1.0" encoding="UTF-8"?>
+  <beans xmlns="http://www.springframework.org/schema/beans"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:context="http://www.springframework.org/schema/context"
+         xsi:schemaLocation="
+          http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+  
+      <!--用于扫描有注解的声明-->
+      <context:component-scan base-package="bean" />
+  
+      <!--仅仅扫描属性上的注解-->
+      <!--<context:annotation-config></context:annotation-config>-->
+  
+      <!--生成类对象-->
+      <bean id="bookDao" class="bean.BookDao"/>
+      <bean id="orderDao123" class="bean.OrderDao"/>
+      <bean id="bookService" class="bean.BookService"/>
+  </beans>
+  ```
+
+  <!--测试类.java-->
+
+  ```java
+  package test;
+  import bean.BookService;
+  import org.junit.Test;
+  import org.springframework.context.ApplicationContext;
+  import org.springframework.context.support.ClassPathXmlApplicationContext;
+  public class TestMultiCreate {
+      @Test
+      public void test() {
+          ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+          BookService bookService = (BookService) context.getBean("bookService");
+          bookService.add();
+      }
+  }
+  ```
+
+  
 
 ### 索引
 
