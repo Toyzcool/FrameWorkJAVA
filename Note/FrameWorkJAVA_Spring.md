@@ -737,7 +737,7 @@
 
 - 底层：使用动态代理机制
 
-- 情况一：有接口的情况，使用jdk动态代理方式，创建 接口实现类代理对象
+- 情况一：有接口的情况，使用jdk**动态代理方式(default)**，创建 接口实现类代理对象
 
   <!--接口.java-->
 
@@ -815,11 +815,99 @@ public class User{
 
 - 切面（Aspect）：切入点和增强的结合点，就是增强应用到切入点的过程
 
+## 5.AspectJ
 
+### 方法
 
+#### 1.配置文件实现AOP——重点
 
+- 准备工作
 
+  1. 导入jar包
 
+  2. 添加约束
 
+     ```xml
+     <!--引入约束-->
+     <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+            xsi:schemaLocation="
+            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+     ```
 
+- 步骤
+
+  1. 创建增强类、被增强类以及各自的方法
+
+  2. 配置文件中声明aop标签
+
+  3. 实例化增强类、被增强类
+
+  4. 配置切入点，包括被增强类的execution表达式、切入点id
+
+     - **Execution表达式有三种**
+
+       ```xml
+       //第一个星号代表访问修饰符，紧接着是一个空格
+       execution(* *.*(..)) //代表所有类和方法
+       execution(* bean.Stone.*(..)) //代表bean包下Stone类下的所有方法
+       execution(* bean.Stone.strength(..)) //代表bean包下Stone类下strength方法
+       ```
+  
+  5. 配置切面，包括增强类、增强类的方法、切入点
+  
+     <!--比喻理解
+     增强类比喻成宝石，宝石有多种功效；
+     被增强类比喻成武器，武器上有多个凹槽；
+     AOP过程相当于宝石中的某种功效镶嵌到武器的某个凹槽中；
+     配置切入点，execution表达式等于确认背包中哪一把武器，切入点id等于武器的哪个凹槽；
+     配置切面，增强类等于哪颗宝石，增强类的方法等于宝石的哪种属性，力量还是魔法，切入点就是武器的凹槽；
+     -->
+  
+     <!--配置文件以及增强类、被增强类-->
+  
+  ```xml
+  <!--引入约束-->
+  <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+         xsi:schemaLocation="
+         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+  
+  <!--1.配置文件方法来实现AOP-->
+      <!--1.1 实例化类对象-->
+          <bean id="weapon" class="bean.Weapon"/>
+          <bean id="stone" class="bean.Stone"/>
+      <!--1.2 配置-->
+      <aop:config>
+          <!--1.2.1 配置切入点-->
+          <aop:pointcut id="weaponHit" expression="execution(* bean.Weapon.*(..))"/>
+          <!--1.2.2 配置切面-->
+          <aop:aspect ref="stone">
+              <aop:before method="strength" pointcut-ref="weaponHit" />
+          </aop:aspect>
+      </aop:config>
+  </beans>
+  ```
+  
+  ```java
+  // 增强类
+  package bean;
+  public class Stone {
+      public void strength(){
+          System.out.println("stone strength...");
+      }
+  }
+  ```
+  
+  ```java
+  // 被增强类
+  package bean;
+  public class Weapon {
+      public void hit(){
+          System.out.println("weapon hit...");
+      }
+  }
+  ```
+  
+  
 
