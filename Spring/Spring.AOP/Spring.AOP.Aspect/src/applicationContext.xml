@@ -14,7 +14,12 @@
         <aop:pointcut id="weaponHit" expression="execution(* bean.Weapon.*(..))"/>
         <!--1.2.2 配置切面-->
         <aop:aspect ref="stone">
-            <aop:before method="strength" pointcut-ref="weaponHit" />
+            <!--1.2.2.1 前置增强 -->
+            <aop:before method="strengthBefore" pointcut-ref="weaponHit" />
+            <!--1.2.2.2 后置增强 -->
+            <aop:after method="strengthAfter" pointcut-ref="weaponHit" />
+            <!--1.2.2.3 环绕增强 -->
+            <aop:around method="strengthAround" pointcut-ref="weaponHit" />
         </aop:aspect>
     </aop:config>
 </beans>

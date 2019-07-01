@@ -854,7 +854,7 @@ public class User{
        execution(* bean.Stone.strength(..)) //代表bean包下Stone类下strength方法
        ```
   
-  5. 配置切面，包括增强类、增强类的方法、切入点
+  5. 配置切面，包括增强类、增强类的方法、切入点、三种增强方式
   
      <!--比喻理解
      增强类比喻成宝石，宝石有多种功效；
@@ -883,18 +883,38 @@ public class User{
           <aop:pointcut id="weaponHit" expression="execution(* bean.Weapon.*(..))"/>
           <!--1.2.2 配置切面-->
           <aop:aspect ref="stone">
-              <aop:before method="strength" pointcut-ref="weaponHit" />
+              <!--1.2.2.1 前置增强 -->
+              <aop:before method="strengthBefore" pointcut-ref="weaponHit" />
+              <!--1.2.2.2 后置增强 -->
+              <aop:after method="strengthAfter" pointcut-ref="weaponHit" />
+              <!--1.2.2.3 环绕增强 -->
+              <aop:around method="strengthAround" pointcut-ref="weaponHit" />
           </aop:aspect>
       </aop:config>
   </beans>
   ```
   
   ```java
-  // 增强类
   package bean;
+  
+  import org.aspectj.lang.ProceedingJoinPoint;
+  
   public class Stone {
-      public void strength(){
-          System.out.println("stone strength...");
+  //    1 前置增强
+      public void strengthBefore(){
+          System.out.println("stone strength before...");
+      }
+  //    2 后置增强
+      public void strengthAfter(){
+          System.out.println("stone strength after...");
+      }
+  //    3 环绕增强
+      public void strengthAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable{
+  //        3.1 方法之前
+          System.out.println("stone strength around before...");
+          proceedingJoinPoint.proceed();
+  //        3.2 方法之后
+          System.out.println("stone strength around after...");
       }
   }
   ```
@@ -908,6 +928,116 @@ public class User{
       }
   }
   ```
-  
-  
+
+#### 2.注解实现AOP——重点
+
+- 准备工作
+
+  1. 导入jar包
+
+  2. 添加约束
+
+     ```xml
+     <!--引入约束-->
+     <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+            xsi:schemaLocation="
+            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+     ```
+
+- 步骤，见实现1
+
+  1. 创建两个类，各自添加方法
+  2. 配置文件中，首先开启aop注解声明，然后实例化两个类
+  3. 增强类头部添加@Aspect注解
+  4. 增强类的方法头部添加@Before/@After/@AfterReturning/@Around等注解
+  5. 注解的value值为execution表达式
+  6. 统一方法不同切面可以用@Order来设置优先级
+
+### 实现
+
+#### 实现1
+
+1.被增强类
+
+```java
+package bean;
+import org.aspectj.lang.annotation.Pointcut;
+public class Book {
+    public void add(){
+        System.out.println("Book...");
+    }
+}
+```
+
+2.增强类
+
+```java
+package bean;
+
+// 当前类为增强类
+
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.*;
+
+@Aspect
+public class MyBook {
+    @Before(value = "execution(* bean.Book.add(..))")
+    public void before(){
+        System.out.println("前置增强");
+    }
+    @After(value = "execution(* bean.Book.add(..))")
+    public void after(){
+        System.out.println("最终增强");
+    }
+    @AfterReturning(value = "execution(* bean.Book.add(..))")
+    public void afterReturning(){
+        System.out.println("后置增强");
+    }
+    @Around(value = "execution(* bean.Book.add(..))")
+    public void around(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+        System.out.println("环绕增强前");
+        proceedingJoinPoint.proceed();
+        System.out.println("环绕增强后");
+    }
+}
+```
+
+3.配置文件.xml
+
+```xml
+<!--引入约束-->
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+<!--1 使用注解方式实现AOP-->
+<!--    1.1 开启注解-->
+    <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+<!--    1.2 实例化对象-->
+    <bean id="book" class="bean.Book" />
+    <bean id="myBook" class="bean.MyBook" />
+</beans>
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
