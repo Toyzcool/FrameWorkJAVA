@@ -11,9 +11,12 @@
       <param-name>contextConfigLocation</param-name>
       <param-value>classpath:springmvc.xml</param-value>
     </init-param>
+<!--    标记容器在启动的时候就加载这个servlet，数值代表优先级-->
+    <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet-mapping>
     <servlet-name>dispatcherServlet</servlet-name>
+<!--    拦截所有请求-->
     <url-pattern>/</url-pattern>
   </servlet-mapping>
 </web-app>
