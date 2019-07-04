@@ -9,7 +9,7 @@ public class RequestMappingHandler {
 
     //    Value、path属性效果一样，同时可以省略属性名称
 //    设计二级value = "/user/testValue"，用于划分模块——关联RequestMappingHandler2.java
-    @RequestMapping("/user/testValue")
+    @RequestMapping("user/testValue")
     public String testValue(){
         System.out.println("testValue...user");
         return "success";

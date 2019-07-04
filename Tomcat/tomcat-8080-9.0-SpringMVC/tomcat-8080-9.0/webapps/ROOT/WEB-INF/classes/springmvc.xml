@@ -15,16 +15,17 @@
            https://www.springframework.org/schema/context/spring-context.xsd
            ">
 
-    <!-- 开启注解扫描 -->
-    <context:component-scan base-package="org.handler"/>
+    <!--开启注解扫描-->
+    <context:component-scan base-package="org.RequestMapping*"/>
+    <context:component-scan base-package="org.Param*"/>
 
-    <!-- 配置视图解析器 -->
+    <!--开启springmvc注解扫描-->
+    <mvc:annotation-driven/>
+
+    <!--视图解析器-->
     <bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="prefix" value="/WEB-INF/pages/"></property>
-        <property name="suffix" value=".jsp"></property>
+        <property name="prefix" value="/WEB-INF/pages/"/>
+        <property name="suffix" value=".jsp"/>
     </bean>
-
-    <!-- 开启SpringMVC注解的支持 -->
-    <mvc:annotation-driven />
 
 </beans>

@@ -4,7 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 //    类中添加value = "/order"，用于划分模块
-@RequestMapping("/order")
+@RequestMapping("order")
 public class RequestMappingHandler2 {
     //    测试value值
     @RequestMapping("testValue")
