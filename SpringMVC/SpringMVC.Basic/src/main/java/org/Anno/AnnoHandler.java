@@ -11,7 +11,7 @@ import java.util.Date;
 
 @Controller
 @RequestMapping("/anno")
-@SessionAttributes({"sessionName"}) //该注解只用于类
+@SessionAttributes({"sessionName"}) //该注解只用于类，把数据存储在Session域里面
 public class AnnoHandler {
     /*
     1.RequestParam 获取请求参数
@@ -88,7 +88,7 @@ public class AnnoHandler {
     /*
       7.SessionAttribute 向Session中传值、获取值、删除值
     */
-    //  把数据存入 SessionAttribute
+    //  把数据存入 Request域里面
     @RequestMapping("/setSessionAttribute")
     public String setSessionAttribute(Model model){
         model.addAttribute("sessionName","session胜利！！！！");
