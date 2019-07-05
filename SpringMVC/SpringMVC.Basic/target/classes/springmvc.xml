@@ -20,12 +20,21 @@
     <context:component-scan base-package="org.Param*"/>
 
     <!--开启springmvc注解扫描-->
-    <mvc:annotation-driven/>
+    <mvc:annotation-driven conversion-service="conversionServiceFactoryBean"/>
 
     <!--视图解析器-->
     <bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/pages/"/>
         <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <!--配置自定义类型转换器-->
+    <bean id="conversionServiceFactoryBean" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters" >
+            <set>
+                <bean class="utils.StringToDate" />
+            </set>
+        </property>
     </bean>
 
 </beans>

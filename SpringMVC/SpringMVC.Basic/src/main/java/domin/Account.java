@@ -1,6 +1,9 @@
 package domin;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /*
 请求参数绑定把数据装到当前类中,将对象属性User注入
@@ -10,7 +13,12 @@ public class Account implements Serializable {
     public String password;
     public int money;
 
-    public User user;
+//    对象类型属性的注入
+//    public User user;
+
+//    集合属性的注入
+    private List<User> list;
+    private Map<String,User> map;
 
     public void setUsername(String username) {
         this.username = username;
@@ -35,13 +43,32 @@ public class Account implements Serializable {
     public int getMoney() {
         return money;
     }
+//    对象类型属性的get和set方法
+//    public User getUser() {
+//        return user;
+//    }
+//
+//    public void setUser(User user) {
+//        this.user = user;
+//    }
 
-    public User getUser() {
-        return user;
+
+//    集合属性的get和set方法
+
+    public List<User> getList() {
+        return list;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setList(List<User> list) {
+        this.list = list;
+    }
+
+    public Map<String, User> getMap() {
+        return map;
+    }
+
+    public void setMap(Map<String, User> map) {
+        this.map = map;
     }
 
     @Override
@@ -50,8 +77,8 @@ public class Account implements Serializable {
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", money=" + money +
-                ", user.uname=" + user.uname +
-                ", user.age=" + user.age +
+                ", list=" + list +
+                ", map=" + map +
                 '}';
     }
 }

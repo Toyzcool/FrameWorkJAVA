@@ -1,8 +1,13 @@
 package org.Param.handler;
 
 import domin.Account;
+import domin.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 
 @Controller
@@ -25,6 +30,29 @@ public class paramHandler {
     public String saveAccount(Account account){
         System.out.printf("Account封装成功");
         System.out.println(account);
+        return "success";
+    }
+
+    /*
+    3.自定义类型转换
+    */
+    @RequestMapping("saveUser")
+    public String saveDate(User user){
+        System.out.printf("Date转换成功");
+        System.out.println(user);
+        return "success";
+    }
+
+    /*
+    4.获取原生的Servlet API
+    */
+    @RequestMapping("getServletAPI")
+    public String getServletAPI(HttpServletRequest request, HttpServletResponse response){
+        System.out.printf("getServletAPI");
+        System.out.println(request);
+        System.out.println(response);
+        HttpSession httpSession = request.getSession();
+        System.out.println(httpSession);
         return "success";
     }
 }
