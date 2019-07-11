@@ -31,7 +31,18 @@
             <mvc:mapping path="/test/**"/>
             <!--配置哪些访问不拦截-->
             <!--<mvc:exclude-mapping path=""/>-->
-            <bean class="com.Interceptor.MyInterceptor"/>
+            <bean class="com.Interceptor.MyInterceptor1"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <!--配置拦截器-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <!--配置哪些访问拦截-->
+            <mvc:mapping path="/test/**"/>
+            <!--配置哪些访问不拦截-->
+            <!--<mvc:exclude-mapping path=""/>-->
+            <bean class="com.Interceptor.MyInterceptor2"/>
         </mvc:interceptor>
     </mvc:interceptors>
 
